@@ -5,13 +5,25 @@ section .data
     Const3 db 'Enter the third constant value: '
 
 section .bss
-    index resd 1
-    val1 resd 1
-    val2 resd 1
-    val3 resd 1
+    index resb 5
+    val1 resb 5
+    val2 resb 5
+    val3 resb 5
 
 section .text
 global _start
+
+_start:
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, 34
+    mov edx, 5
+    int 0x80
+    ;call write_value
+
+    mov eax, 1
+    mov ebx, 0
+    int 0x80
 
 ;eax - address
 read_value:
@@ -33,12 +45,3 @@ write_value:
     mov ebx, 1
     int 0x80
     ret
-
-_start:
-    mov eax, [index]
-    call read_value
-    mov ebx, index
-
-    mov eax, 1
-    ;mov ebx, 0
-    int 0x80
