@@ -41,8 +41,6 @@ _start:
     mov edx, 4
     int 0x80
 
-    jmp exit
-
     ;Write
     mov eax, 4
     mov ebx, 1
@@ -50,15 +48,13 @@ _start:
     mov edx, const1l
     int 0x80
 
-    ;Read
-    mov eax, 3
-    mov ebx, 0
-    mov ecx, val1
-    mov edx, 4
-    int 0x80
+    call read_num_value
+    mov DWORD [val1], eax
 
-    mov eax, val1
-    call bound_check
+    cmp eax, 0
+    jl exit
+    cmp eax, 65535
+    jg exit
 
     ;Write
     mov eax, 4
@@ -67,15 +63,13 @@ _start:
     mov edx, const2l
     int 0x80
 
-    ;Read
-    mov eax, 3
-    mov ebx, 0
-    mov ecx, val2
-    mov edx, 4
-    int 0x80
+    call read_num_value
+    mov DWORD [val2], eax
 
-    mov eax, val2
-    call bound_check
+    cmp eax, 0
+    jl exit
+    cmp eax, 65535
+    jg exit
 
     ;Write
     mov eax, 4
@@ -84,15 +78,13 @@ _start:
     mov edx, const3l
     int 0x80
 
-    ;Read
-    mov eax, 3
-    mov ebx, 0
-    mov ecx, val3
-    mov edx, 4
-    int 0x80
+    call read_num_value
+    mov DWORD [val3], eax
 
-    mov eax, val3
-    call bound_check
+    cmp eax, 0
+    jl exit
+    cmp eax, 65535
+    jg exit
 
     ;Write
     mov eax, 4
