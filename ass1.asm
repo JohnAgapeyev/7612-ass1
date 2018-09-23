@@ -154,6 +154,9 @@ loo:
 
     ;Grab current buffer byte
     mov dl, [buffer + ecx]
+    ;Check if byte is negative sign
+    cmp dl, 0x2d
+    jle negative
 
     ;eax = (buffer[ecx] & 0xf) * ebx
     and edx, 0xf
@@ -167,23 +170,13 @@ loo:
     jmp loo
 
 convert_done:
-    ;Grab current buffer byte
-    mov edx, [buffer]
-
-    ;Check if first char is '-'
-    cmp edx, 45
-    je negative
-
-neg_done:
     mov esp, ebp
     pop ebp
     ret
 
 negative:
     imul eax, -1
-    jmp neg_done
-
-
+    jmp convert_done
 
 
 ;eax is the value
