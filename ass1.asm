@@ -261,6 +261,7 @@ one:
     mov ebx, 1
     mov ecx, buffer
 
+    ;Offset ecx by byte counter to prevent zero padding the string
     add ecx, 6
     sub ecx, esi
 
