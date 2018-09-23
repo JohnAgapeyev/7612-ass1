@@ -102,8 +102,17 @@ _start:
     mov edx, 4
     int 0x80
 
+exit:
     ;Exit
     mov eax, 1
     mov ebx, 0
     int 0x80
 
+;eax is the value
+bound_check:
+    cmp eax, 0
+    jl exit
+    cmp eax, 65535
+    jg exit
+
+    ret
