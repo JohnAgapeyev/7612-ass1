@@ -150,6 +150,9 @@ write_val:
     ;Store value in ebx
     mov ebx, eax
 
+    ;Zero out byte counter
+    xor esi, esi
+
     ;Clear edx
     xor edx, edx
 
@@ -158,6 +161,11 @@ write_val:
     ;Divide by 10k
     mov ecx, 10000
     div ecx
+
+    cmp al, 0
+    jz thousand
+
+    inc esi
 
     ;Convert number to character equivalent
     ;al += '0'
@@ -168,6 +176,7 @@ write_val:
     ;Store remainder
     mov ebx, edx
 
+thousand:
     ;Clear edx
     xor edx, edx
 
@@ -176,6 +185,11 @@ write_val:
     ;Divide by 1k
     mov ecx, 1000
     div ecx
+
+    cmp al, 0
+    jz hundred
+
+    inc esi
 
     ;Convert number to character equivalent
     ;al += '0'
@@ -186,6 +200,7 @@ write_val:
     ;Store remainder
     mov ebx, edx
 
+hundred:
     ;Clear edx
     xor edx, edx
 
@@ -194,6 +209,11 @@ write_val:
     ;Divide by 100
     mov ecx, 100
     div ecx
+
+    cmp al, 0
+    jz ten
+
+    inc esi
 
     ;Convert number to character equivalent
     ;al += '0'
@@ -204,6 +224,7 @@ write_val:
     ;Store remainder
     mov ebx, edx
 
+ten:
     ;Clear edx
     xor edx, edx
 
@@ -213,11 +234,18 @@ write_val:
     mov ecx, 10
     div ecx
 
+    cmp al, 0
+    jz one
+
+    inc esi
+
     ;Convert number to character equivalent
     ;al += '0'
     add al, 48
     ;Store the 10 byte
     mov BYTE [buffer + 3], al
+
+one:
     add dl, 48
     ;Store the 1 byte
     mov BYTE [buffer + 4], dl
@@ -225,11 +253,18 @@ write_val:
     ;Add newline char
     mov BYTE [buffer + 5], 0xa
 
+    inc esi
+    inc esi
+
     ;Write
     mov eax, 4
     mov ebx, 1
     mov ecx, buffer
-    mov edx, 6
+
+    add ecx, 6
+    sub ecx, esi
+
+    mov edx, esi
     int 0x80
 
     ret
