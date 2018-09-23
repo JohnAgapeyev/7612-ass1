@@ -81,6 +81,30 @@ _start:
     ;Write out received value
     call write_val
 
+    ;++nvalue
+    inc DWORD [index]
+
+    cmp DWORD [index], 0
+    je case_zero
+    cmp DWORD [index], 1
+    je case_one
+    cmp DWORD [index], 2
+    je case_two
+    cmp DWORD [index], 3
+    je case_three
+    jmp case_default
+
+case_zero:
+    jmp exit
+case_one:
+    jmp exit
+case_two:
+    jmp exit
+case_three:
+    jmp exit
+case_default:
+
+
 exit:
     ;Exit
     mov eax, 1
