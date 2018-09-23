@@ -141,6 +141,8 @@ read_num_value:
 
     ;Grab number of bytes read
     mov ecx, eax
+    dec ecx
+    dec ecx
 
     xor eax, eax
     mov ebx, 1
@@ -151,7 +153,7 @@ loo:
     jl convert_done
 
     ;Grab current buffer byte
-    mov edx, [buffer + ecx]
+    mov dl, [buffer + ecx]
 
     ;eax = (buffer[ecx] & 0xf) * ebx
     and edx, 0xf
@@ -166,7 +168,7 @@ loo:
 
 convert_done:
     ;Grab current buffer byte
-    mov edx, [buffer + ecx]
+    mov edx, [buffer]
 
     ;Check if first char is '-'
     cmp edx, 45
