@@ -7,6 +7,16 @@ section .data
     const2l equ $-Const2
     Const3 db 'Enter the third constant value: '
     const3l equ $-Const3
+    def db 'default '
+    deflen equ $-def
+    num0 db 'Case0: '
+    num0len equ $-num1
+    num1 db 'Case1: '
+    num1len equ $-num1
+    num2 db 'Case2: '
+    num2len equ $-num1
+    num3 db 'Case3: '
+    num3len equ $-num1
 
 section .bss
     buffer resb 100
@@ -95,15 +105,44 @@ _start:
     jmp case_default
 
 case_zero:
+    ;Write
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, num0
+    mov edx, num0len
+    int 0x80
     jmp exit
 case_one:
+    ;Write
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, num1
+    mov edx, num1len
+    int 0x80
     jmp exit
 case_two:
+    ;Write
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, num2
+    mov edx, num2len
+    int 0x80
     jmp exit
 case_three:
+    ;Write
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, num3
+    mov edx, num3len
+    int 0x80
     jmp exit
 case_default:
-
+    ;Write
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, def
+    mov edx, deflen
+    int 0x80
 
 exit:
     ;Exit
