@@ -32,12 +32,14 @@ _start:
     ;Perform bounds checking
     call bound_check
 
+    call write_val
+
     ;Write converted value
-    mov eax, 4
-    mov ebx, 1
-    mov ecx, index
-    mov edx, 4
-    int 0x80
+    ;mov eax, 4
+    ;mov ebx, 1
+    ;mov ecx, index
+    ;mov edx, 4
+    ;int 0x80
 
     ;Write
     mov eax, 4
@@ -159,11 +161,83 @@ negative:
     imul eax, -1
     jmp convert_done
 
-
 ;eax is the value
 bound_check:
     cmp eax, 0
     jl exit
     cmp eax, 65535
     jg exit
+    ret
+
+;eax is the value
+write_val:
+    ;Store value in ebx
+    mov ebx, eax
+
+    ;Clear edx
+    xor edx, edx
+
+    ;Set the dividend
+    mov eax, ebx
+    ;Divide by 10k
+    mov ecx, 10000
+    div ecx
+
+    ;Store the 10k byte
+    mov BYTE [buffer], al
+
+    ;Store remainder
+    mov ebx, edx
+
+    ;Clear edx
+    xor edx, edx
+
+    ;Set the dividend
+    mov eax, ebx
+    ;Divide by 1k
+    mov ecx, 1000
+    div ecx
+
+    ;Store the 1k byte
+    mov BYTE [buffer + 1], al
+
+    ;Store remainder
+    mov ebx, edx
+
+    ;Clear edx
+    xor edx, edx
+
+    ;Set the dividend
+    mov eax, ebx
+    ;Divide by 100
+    mov ecx, 100
+    div ecx
+
+    ;Store the 100 byte
+    mov BYTE [buffer + 2], al
+
+    ;Store remainder
+    mov ebx, edx
+
+    ;Clear edx
+    xor edx, edx
+
+    ;Set the dividend
+    mov eax, ebx
+    ;Divide by 100
+    mov ecx, 10
+    div ecx
+
+    ;Store the 10 byte
+    mov BYTE [buffer + 3], al
+    ;Store the 1 byte
+    mov BYTE [buffer + 4], dl
+
+    ;Write
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, buffer
+    mov edx, 5
+    int 0x80
+
     ret
