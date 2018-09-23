@@ -27,12 +27,10 @@ _start:
     int 0x80
 
     call read_num_value
+    ;Save number into index
     mov DWORD [index], eax
-
-    cmp eax, 0
-    jl exit
-    cmp eax, 65535
-    jg exit
+    ;Perform bounds checking
+    call bound_check
 
     ;Write converted value
     mov eax, 4
@@ -50,11 +48,8 @@ _start:
 
     call read_num_value
     mov DWORD [val1], eax
-
-    cmp eax, 0
-    jl exit
-    cmp eax, 65535
-    jg exit
+    ;Perform bounds checking
+    call bound_check
 
     ;Write
     mov eax, 4
@@ -65,11 +60,8 @@ _start:
 
     call read_num_value
     mov DWORD [val2], eax
-
-    cmp eax, 0
-    jl exit
-    cmp eax, 65535
-    jg exit
+    ;Perform bounds checking
+    call bound_check
 
     ;Write
     mov eax, 4
@@ -80,11 +72,8 @@ _start:
 
     call read_num_value
     mov DWORD [val3], eax
-
-    cmp eax, 0
-    jl exit
-    cmp eax, 65535
-    jg exit
+    ;Perform bounds checking
+    call bound_check
 
     ;Write
     mov eax, 4
