@@ -32,15 +32,6 @@ _start:
     ;Perform bounds checking
     call bound_check
 
-    call write_val
-
-    ;Write converted value
-    ;mov eax, 4
-    ;mov ebx, 1
-    ;mov ecx, index
-    ;mov edx, 4
-    ;int 0x80
-
     ;Write
     mov eax, 4
     mov ebx, 1
@@ -77,33 +68,18 @@ _start:
     ;Perform bounds checking
     call bound_check
 
-    ;Write
-    mov eax, 4
-    mov ebx, 1
-    mov ecx, index
-    mov edx, 4
-    int 0x80
-
-    ;Write
-    mov eax, 4
-    mov ebx, 1
-    mov ecx, val1
-    mov edx, 4
-    int 0x80
-
-    ;Write
-    mov eax, 4
-    mov ebx, 1
-    mov ecx, val2
-    mov edx, 4
-    int 0x80
-
-    ;Write
-    mov eax, 4
-    mov ebx, 1
-    mov ecx, val3
-    mov edx, 4
-    int 0x80
+    mov eax, DWORD [index]
+    ;Write out received value
+    call write_val
+    mov eax, DWORD [val1]
+    ;Write out received value
+    call write_val
+    mov eax, DWORD [val2]
+    ;Write out received value
+    call write_val
+    mov eax, DWORD [val3]
+    ;Write out received value
+    call write_val
 
 exit:
     ;Exit
@@ -183,6 +159,9 @@ write_val:
     mov ecx, 10000
     div ecx
 
+    ;Convert number to character equivalent
+    ;al += '0'
+    add al, 48
     ;Store the 10k byte
     mov BYTE [buffer], al
 
@@ -198,6 +177,9 @@ write_val:
     mov ecx, 1000
     div ecx
 
+    ;Convert number to character equivalent
+    ;al += '0'
+    add al, 48
     ;Store the 1k byte
     mov BYTE [buffer + 1], al
 
@@ -213,6 +195,9 @@ write_val:
     mov ecx, 100
     div ecx
 
+    ;Convert number to character equivalent
+    ;al += '0'
+    add al, 48
     ;Store the 100 byte
     mov BYTE [buffer + 2], al
 
@@ -228,16 +213,23 @@ write_val:
     mov ecx, 10
     div ecx
 
+    ;Convert number to character equivalent
+    ;al += '0'
+    add al, 48
     ;Store the 10 byte
     mov BYTE [buffer + 3], al
+    add dl, 48
     ;Store the 1 byte
     mov BYTE [buffer + 4], dl
+
+    ;Add newline char
+    mov BYTE [buffer + 5], 0xa
 
     ;Write
     mov eax, 4
     mov ebx, 1
     mov ecx, buffer
-    mov edx, 5
+    mov edx, 6
     int 0x80
 
     ret
