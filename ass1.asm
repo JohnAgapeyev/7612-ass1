@@ -10,13 +10,13 @@ section .data
     def db 'default '
     deflen equ $-def
     num0 db 'Case0: '
-    num0len equ $-num1
+    num0len equ $-num0
     num1 db 'Case1: '
     num1len equ $-num1
     num2 db 'Case2: '
-    num2len equ $-num1
+    num2len equ $-num2
     num3 db 'Case3: '
-    num3len equ $-num1
+    num3len equ $-num3
 
 section .bss
     buffer resb 100
@@ -111,6 +111,11 @@ case_zero:
     mov ecx, num0
     mov edx, num0len
     int 0x80
+
+    mov eax, DWORD [val1]
+    imul eax, DWORD [val2]
+    call write_val
+
     jmp exit
 case_one:
     ;Write
@@ -119,6 +124,11 @@ case_one:
     mov ecx, num1
     mov edx, num1len
     int 0x80
+
+    mov eax, DWORD [val2]
+    imul eax, DWORD [val3]
+    call write_val
+
     jmp exit
 case_two:
     ;Write
@@ -127,6 +137,11 @@ case_two:
     mov ecx, num2
     mov edx, num2len
     int 0x80
+
+    mov eax, DWORD [val3]
+    sub eax, DWORD [val1]
+    call write_val
+
     jmp exit
 case_three:
     ;Write
@@ -135,6 +150,11 @@ case_three:
     mov ecx, num3
     mov edx, num3len
     int 0x80
+
+    mov eax, DWORD [val1]
+    sub eax, DWORD [val3]
+    call write_val
+
     jmp exit
 case_default:
     ;Write
