@@ -9,10 +9,11 @@ section .data
     const3l equ $-Const3
 
 section .bss
-    index resb 4
-    val1 resb 4
-    val2 resb 4
-    val3 resb 4
+    buffer resb 100
+    index resd 1
+    val1 resd 1
+    val2 resd 1
+    val3 resd 1
 
 section .text
 global _start
@@ -25,12 +26,22 @@ _start:
     mov edx, indl
     int 0x80
 
-    ;Read
-    mov eax, 3
-    mov ebx, 0
+    call read_num_value
+    mov DWORD [index], eax
+
+    cmp eax, 0
+    jl exit
+    cmp eax, 65535
+    jg exit
+
+    ;Write converted value
+    mov eax, 4
+    mov ebx, 1
     mov ecx, index
     mov edx, 4
     int 0x80
+
+    jmp exit
 
     ;Write
     mov eax, 4
@@ -46,6 +57,9 @@ _start:
     mov edx, 4
     int 0x80
 
+    mov eax, val1
+    call bound_check
+
     ;Write
     mov eax, 4
     mov ebx, 1
@@ -60,6 +74,9 @@ _start:
     mov edx, 4
     int 0x80
 
+    mov eax, val2
+    call bound_check
+
     ;Write
     mov eax, 4
     mov ebx, 1
@@ -73,6 +90,9 @@ _start:
     mov ecx, val3
     mov edx, 4
     int 0x80
+
+    mov eax, val3
+    call bound_check
 
     ;Write
     mov eax, 4
@@ -108,11 +128,66 @@ exit:
     mov ebx, 0
     int 0x80
 
+read_num_value:
+    push ebp
+    mov ebp, esp
+
+    ;Read string into buffer
+    mov eax, 3
+    mov ebx, 0
+    mov ecx, buffer
+    mov edx, 100
+    int 0x80
+
+    ;Grab number of bytes read
+    mov ecx, eax
+
+    xor eax, eax
+    mov ebx, 1
+
+loo:
+    ;Loop condition
+    cmp ecx, 0
+    jl convert_done
+
+    ;Grab current buffer byte
+    mov edx, [buffer + ecx]
+
+    ;eax = (buffer[ecx] & 0xf) * ebx
+    and edx, 0xf
+    imul edx, ebx
+    add eax, edx
+
+    ;ebx *= 10
+    imul ebx, 10
+
+    dec ecx
+    jmp loo
+
+convert_done:
+    ;Grab current buffer byte
+    mov edx, [buffer + ecx]
+
+    ;Check if first char is '-'
+    cmp edx, 45
+    je negative
+
+neg_done:
+    mov esp, ebp
+    pop ebp
+    ret
+
+negative:
+    imul eax, -1
+    jmp neg_done
+
+
+
+
 ;eax is the value
 bound_check:
     cmp eax, 0
     jl exit
     cmp eax, 65535
     jg exit
-
     ret
