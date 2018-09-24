@@ -94,6 +94,10 @@ _start:
     ;++nvalue
     inc DWORD [index]
 
+    ;Write
+    mov eax, 4
+    mov ebx, 1
+
     cmp DWORD [index], 0
     je case_zero
     cmp DWORD [index], 1
@@ -105,9 +109,6 @@ _start:
     jmp case_default
 
 case_zero:
-    ;Write
-    mov eax, 4
-    mov ebx, 1
     mov ecx, num0
     mov edx, num0len
     int 0x80
@@ -118,9 +119,6 @@ case_zero:
 
     jmp exit
 case_one:
-    ;Write
-    mov eax, 4
-    mov ebx, 1
     mov ecx, num1
     mov edx, num1len
     int 0x80
@@ -131,9 +129,6 @@ case_one:
 
     jmp exit
 case_two:
-    ;Write
-    mov eax, 4
-    mov ebx, 1
     mov ecx, num2
     mov edx, num2len
     int 0x80
@@ -144,9 +139,6 @@ case_two:
 
     jmp exit
 case_three:
-    ;Write
-    mov eax, 4
-    mov ebx, 1
     mov ecx, num3
     mov edx, num3len
     int 0x80
@@ -157,9 +149,6 @@ case_three:
 
     jmp exit
 case_default:
-    ;Write
-    mov eax, 4
-    mov ebx, 1
     mov ecx, def
     mov edx, deflen
     int 0x80
