@@ -185,11 +185,9 @@ read_num_value:
     xor eax, eax
     mov ebx, 1
 
-loo:
-    ;Loop condition
-    cmp ecx, 0
-    jl convert_done
+    jmp loop_start
 
+loo:
     ;Grab current buffer byte
     mov dl, [buffer + ecx]
     ;Check if byte is negative sign
@@ -205,14 +203,16 @@ loo:
     imul ebx, 10
 
     dec ecx
-    jmp loo
 
-convert_done:
+loop_start:
+    ;Loop condition
+    cmp ecx, 0
+    jge loo
     ret
 
 negative:
     neg eax
-    jmp convert_done
+    ret
 
 ;eax is the value
 bound_check:
