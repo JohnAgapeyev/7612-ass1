@@ -230,6 +230,31 @@ bound_check:
 
 ;eax is the value
 write_val:
+    cmp eax, 0
+    jns write_pos
+
+    ;Negate value
+    neg eax
+
+    ;Save on stack
+    push eax
+
+    ;Write negative sign
+    mov eax, 4
+    mov ebx, 1
+    ;0x2d is the '-' char
+    push 0x2d
+    mov ecx, esp
+    mov edx, 1
+    int 0x80
+
+    ;Pop char off the stack
+    pop ecx
+
+    ;Read back saved positive value
+    pop eax
+
+write_pos:
     ;Store value in ebx
     mov ebx, eax
 
