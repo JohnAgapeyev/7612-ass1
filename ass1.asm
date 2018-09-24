@@ -171,9 +171,6 @@ exit:
     int 0x80
 
 read_num_value:
-    push ebp
-    mov ebp, esp
-
     ;Read string into buffer
     mov eax, 3
     mov ebx, 0
@@ -183,8 +180,7 @@ read_num_value:
 
     ;Grab number of bytes read
     mov ecx, eax
-    dec ecx
-    dec ecx
+    sub ecx, 2
 
     xor eax, eax
     mov ebx, 1
@@ -212,12 +208,10 @@ loo:
     jmp loo
 
 convert_done:
-    mov esp, ebp
-    pop ebp
     ret
 
 negative:
-    imul eax, -1
+    neg eax
     jmp convert_done
 
 ;eax is the value
@@ -361,8 +355,7 @@ one:
     ;Add newline char
     mov BYTE [buffer + 5], 0xa
 
-    inc esi
-    inc esi
+    add esi, 2
 
     ;Write
     mov eax, 4
