@@ -181,7 +181,13 @@ loo:
     mov dl, [buffer + ecx]
     ;Check if byte is negative sign
     cmp dl, 0x2d
-    jle negative
+    je negative
+    ;Check if byte is less than '0'
+    cmp dl, 0x30
+    jl exit
+    ;Check if byte is greater than '0'
+    cmp dl, 0x39
+    jg exit
 
     ;eax = (buffer[ecx] & 0xf) * ebx
     and edx, 0xf
