@@ -78,19 +78,6 @@ _start:
     ;Perform bounds checking
     call bound_check
 
-    mov eax, DWORD [index]
-    ;Write out received value
-    call write_val
-    mov eax, DWORD [val1]
-    ;Write out received value
-    call write_val
-    mov eax, DWORD [val2]
-    ;Write out received value
-    call write_val
-    mov eax, DWORD [val3]
-    ;Write out received value
-    call write_val
-
     ;++nvalue
     inc DWORD [index]
 
